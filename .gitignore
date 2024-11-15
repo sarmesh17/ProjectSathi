@@ -1,0 +1,71 @@
+# Built application files
+*.apk
+*.aab
+
+# Gradle files
+.gradle/
+build/
+local.properties
+/captures/
+
+# IntelliJ IDEA/Android Studio files
+.idea/
+*.iml
+*.hprof
+
+# Auto-generated files
+/.cxx/
+/.externalNativeBuild/
+*.log
+*.lock
+
+# MacOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Crashlytics and Firebase
+crashlytics-build.properties
+fabric.properties
+
+# Keystore files (do not share your keystore files)
+*.jks
+*.keystore
+
+# Android specific folders
+/outputs/
+/navigation_editor.json
+/.settings/
+
+# Code analysis
+/.reports/
+/lint/outputs/
+/lint/reports/
+
+# Jetpack Compose specific files
+.compose-cache/
+
+# Local test and debug files
+/local.test/
+*.testoutput
+
+# Kotlin specific files
+*.kotlin_metadata
+.kts_compiled
+
+# Exclude secrets and environment-specific files
+.env
+.env.*
+
+# Exclude user-specific configuration files
+/.vscode/
+*.swp
+
+# Exclude temporary files from IDEs
+__pycache__/
+*.bak
+*.tmp
+*.temp
