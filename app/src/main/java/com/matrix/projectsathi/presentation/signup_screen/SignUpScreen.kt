@@ -1,10 +1,9 @@
-package com.matrix.projectsathi
+package com.matrix.projectsathi.presentation.signup_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,11 +47,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.matrix.projectsathi.R
+import com.matrix.projectsathi.presentation.viewmodels.AuthViewModel
+import com.matrix.projectsathi.presentation.viewmodels.SignUpState
 
-@Preview(showSystemUi = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    viewModel:AuthViewModel,
+    onSignUpSuccess: () -> Unit
+
+) {
+    val signUpState by viewModel.signUpState.observeAsState()
+
     var firstName by remember {
         mutableStateOf("")
     }
@@ -135,7 +144,7 @@ fun SignUpScreen() {
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "Join Free to Find a Mentor or Become a Mentor",
+                        text = "Join us to Find a Mentor or Become a Mentor",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
@@ -153,38 +162,40 @@ fun SignUpScreen() {
                     HorizontalDivider(color = Color.Gray)
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    Row (
+                    Row(
                         modifier = Modifier.fillMaxWidth()
-                    ){
+                    ) {
                         Column {
-                            Text(text = "First Name:",
+                            Text(
+                                text = "First Name:",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             OutlinedTextField(
                                 value = firstName,
-                                onValueChange ={ firstName = it},
+                                onValueChange = { firstName = it },
                                 modifier = Modifier.width(165.dp),
                                 placeholder = {
                                     Text(text = "First Name", color = Color.Gray)
                                 },
-                                textStyle = TextStyle( fontSize = 20.sp)
+                                textStyle = TextStyle(fontSize = 20.sp)
                             )
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
-                            Text(text = "Last Name:",
+                            Text(
+                                text = "Last Name:",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             OutlinedTextField(
                                 value = lastName,
-                                onValueChange ={ lastName = it},
+                                onValueChange = { lastName = it },
                                 modifier = Modifier.width(165.dp),
                                 placeholder = {
                                     Text(text = "Last Name", color = Color.Gray)
                                 },
-                                textStyle = TextStyle( fontSize = 20.sp)
+                                textStyle = TextStyle(fontSize = 20.sp)
                             )
                         }
 
@@ -197,12 +208,12 @@ fun SignUpScreen() {
                     //email
                     OutlinedTextField(
                         value = email,
-                        onValueChange ={ email = it},
+                        onValueChange = { email = it },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = {
                             Text(text = "Email Address", color = Color.Gray)
                         },
-                        textStyle = TextStyle( fontSize = 20.sp)
+                        textStyle = TextStyle(fontSize = 20.sp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -212,17 +223,17 @@ fun SignUpScreen() {
                     //password
                     OutlinedTextField(
                         value = password,
-                        onValueChange ={ password = it},
+                        onValueChange = { password = it },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = {
                             Text(text = "Password", color = Color.Gray)
                         },
-                        textStyle = TextStyle( fontSize = 20.sp)
+                        textStyle = TextStyle(fontSize = 20.sp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
                     //im not robot verify
-                    Box (
+                    Box(
                         modifier = Modifier
                             .border(
                                 width = 1.dp,
@@ -236,7 +247,6 @@ fun SignUpScreen() {
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .clickable { isChecked = !isChecked }
                         ) {
                             Checkbox(
@@ -248,7 +258,11 @@ fun SignUpScreen() {
                                 text = "I'm not a robot"
                             )
                             Spacer(modifier = Modifier.weight(1f))
-                            Image(painter = painterResource(id = R.drawable.recaptcha_img), contentDescription = null, modifier = Modifier.size(70.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.recaptcha_img),
+                                contentDescription = null,
+                                modifier = Modifier.size(70.dp)
+                            )
                         }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -257,34 +271,49 @@ fun SignUpScreen() {
                             .fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(4.dp),
                         colors = CardDefaults.cardColors(Color.White)
-                    ){
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
                             // checkbox terms of use
-                            Checkbox(
-                                checked = isCheckedTerms,
-                                onCheckedChange = { isCheckedTerms = it }
-                            )
-                            Text(text = "I have read and agree to ProjectSathi's Terms of Use")
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+
+
+                                Checkbox(
+                                    checked = isCheckedTerms,
+                                    onCheckedChange = { isCheckedTerms = it }
+                                )
+                                Text(
+                                    text = "I have read and agree to Terms of Use",
+                                    fontSize = 14.sp
+                                )
+                            }
+
                             Spacer(modifier = Modifier.height(16.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
 
-                            //checkbox privacy policy
-                            Checkbox(
-                                checked = isCheckedPolicy,
-                                onCheckedChange = { isCheckedPolicy = it }
-                            )
-                            Text(text = "I have read and agree to ProjectSathi's Privacy Policy")
 
+                                //checkbox privacy policy
+                                Checkbox(
+                                    checked = isCheckedPolicy,
+                                    onCheckedChange = { isCheckedPolicy = it }
+                                )
+                                Text(
+                                    text = "I have read and agree to Privacy Policy",
+                                    fontSize = 14.sp
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(32.dp))
 
 
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            viewModel.signUp(firstName, lastName, email, password)
+                        },
                         modifier = Modifier
                             .height(50.dp)
                             .fillMaxWidth(),
@@ -292,125 +321,26 @@ fun SignUpScreen() {
                     ) {
                         Text(text = "Join Now - FREE")
                     }
+
+
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = "- OR -",
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(Color.White)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Row (
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ){
-                        Text(
-                            text = "Run Your Own\nMentoring Programs",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp
-                        )
-                        Image(painter = painterResource(id = R.drawable.mentor_img), contentDescription = null, modifier = Modifier.size(100.dp))
-                    }
-
-                    Text(
-                        text = "If you are looking to run your own internal, closed and private mentoring programs for your employees, students or membership communities, we can help. Request a demo using the form below.",
-                        fontSize = 16.sp
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
-                    HorizontalDivider(color = Color.Gray)
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    Row (
-                        modifier = Modifier.fillMaxWidth()
-                    ){
-                        Column {
-                            Text(text = "First Name:",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            OutlinedTextField(
-                                value = firstNameMentor,
-                                onValueChange ={ firstNameMentor = it},
-                                modifier = Modifier.width(165.dp),
-                                placeholder = {
-                                    Text(text = "First Name", color = Color.Gray)
-                                },
-                                textStyle = TextStyle( fontSize = 20.sp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column {
-                            Text(text = "Last Name:",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            OutlinedTextField(
-                                value = lastNameMentor,
-                                onValueChange ={ lastNameMentor = it},
-                                modifier = Modifier.width(165.dp),
-                                placeholder = {
-                                    Text(text = "Last Name", color = Color.Gray)
-                                },
-                                textStyle = TextStyle( fontSize = 20.sp)
-                            )
-                        }
-
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Text(text = "Work Email Address:", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    //email
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange ={ email = it},
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = {
-                            Text(text = "Work Email Address", color = Color.Gray)
-                        },
-                        textStyle = TextStyle( fontSize = 20.sp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Once you submit this form a member of our customer success team will be in touch an arrange a time for an introductory call and demo of ProjectSathi's mentoring software solution.",
-                        fontSize = 16.sp
-                    )
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    // request button
-                    Button(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .height(50.dp)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.amber))
-                    ) {
-                        Text(text = "Request A Demo")
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
-                }
-            }
-            Spacer(modifier = Modifier.height(250.dp))
-
         }
+    }
+
+    when (signUpState) {
+        is SignUpState.Loading -> CircularProgressIndicator()
+        is SignUpState.Success -> {
+            onSignUpSuccess()
+        }
+        is SignUpState.Error -> {
+            Text(
+                text = (signUpState as SignUpState.Error).message,
+                color = Color.Red,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+        else -> {}
     }
 }

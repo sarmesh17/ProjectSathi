@@ -46,7 +46,7 @@ class AuthViewModel @Inject constructor(
 }
 
 sealed class SignUpState {
-    object Loading : SignUpState()
-    object Success : SignUpState()
+    data object Loading : SignUpState()
+    data object Success : SignUpState()
     data class Error(val message: String) : SignUpState()
 }
