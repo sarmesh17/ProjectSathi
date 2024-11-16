@@ -30,7 +30,7 @@
        5. Subscription
        6. Premium
 
-**INSTALLATION**
+
 
 
 
@@ -49,12 +49,11 @@
 
 **SCREENSHOT**
 
-![image url ](https://github.com/sarmesh17/ProjectSathi/blob/0a01cb5284bd499fd98eb578fb954feff623f47f/2024-09-04.png)
 
 
 
 **VIDEOS**
-[watch the video](https://github.com/sarmesh17/ProjectSathi/blame/a6dc843439da764d483266f641bb780569bd379d/video.mp4v)
+
 
 
 
