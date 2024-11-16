@@ -1,4 +1,4 @@
-package com.matrix.projectsathi
+package com.matrix.projectsathi.presentation.profilescreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
 import coil.compose.rememberAsyncImagePainter
+import com.matrix.projectsathi.R
 
 
 @OptIn(ExperimentalLayoutApi::class)
