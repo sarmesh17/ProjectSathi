@@ -16,13 +16,36 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import com.matrix.projectsathi.R
 
+data class ChatMessage(val text: String, val isSentByUser: Boolean)
+
 @Composable
-fun WhatsAppChatScreen() {
+fun WhatsAppChatScreen(navHostController: NavHostController) {
+    var messageList by remember { mutableStateOf<List<ChatMessage>>(emptyList()) }
+    var messageText by remember { mutableStateOf("") }
+
     Scaffold(
-        topBar = { ChatTopBar() },
-        bottomBar = { ChatBottomBar() }
+        topBar = { ChatTopBar(navHostController) },
+        bottomBar = {
+            ChatBottomBar(
+                messageText = messageText,
+                onMessageChange = { messageText = it },
+                onSendClick = {
+                    if (messageText.isNotBlank()) {
+                        // Add the user's message
+                        messageList = messageList + ChatMessage(text = messageText, isSentByUser = true)
+
+                        // Simulate bot response
+                        if (messageText.equals("hi", ignoreCase = true)) {
+                            messageList = messageList + ChatMessage(text = "Hello", isSentByUser = false)
+                        }
+                        messageText = ""
+                    }
+                }
+            )
+        }
     ) { padding ->
         LazyColumn(
             contentPadding = padding,
@@ -31,11 +54,26 @@ fun WhatsAppChatScreen() {
                 .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(20) { index ->
-                MessageBubble(
-                    message = "Message $index",
-                    isSentByUser = index % 2 == 0
-                )
+            if (messageList.isEmpty()) {
+                item {
+                    Text(
+                        text = "No chat history",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
+            } else {
+                items(messageList.size) { index ->
+                    val message = messageList[index]
+                    MessageBubble(
+                        message = message.text,
+                        isSentByUser = message.isSentByUser
+                    )
+                }
             }
         }
     }
@@ -43,7 +81,7 @@ fun WhatsAppChatScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatTopBar() {
+fun ChatTopBar(navHostController: NavHostController) {
     TopAppBar(
         title = {
             Row(
@@ -52,7 +90,8 @@ fun ChatTopBar() {
                 IconButton(onClick = { /* Back action */ }) {
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back),
-                        contentDescription = "Back", modifier = Modifier.size(24.dp)
+                        contentDescription = "Back",
+                        modifier = Modifier.size(24.dp)
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -85,13 +124,13 @@ fun ChatTopBar() {
             IconButton(onClick = { /* Video call action */ }) {
                 Icon(
                     painter = painterResource(id = R.drawable.video_call),
-                    contentDescription = "Video Call",modifier = Modifier.size(24.dp)
+                    contentDescription = "Video Call", modifier = Modifier.size(24.dp)
                 )
             }
             IconButton(onClick = { /* Voice call action */ }) {
                 Icon(
                     painter = painterResource(id = R.drawable.call),
-                    contentDescription = "Voice Call",modifier = Modifier.size(24.dp)
+                    contentDescription = "Voice Call", modifier = Modifier.size(24.dp)
                 )
             }
             IconButton(onClick = { /* More action */ }) {
@@ -105,9 +144,11 @@ fun ChatTopBar() {
 }
 
 @Composable
-fun ChatBottomBar() {
-    var messageText by remember { mutableStateOf("") }
-
+fun ChatBottomBar(
+    messageText: String,
+    onMessageChange: (String) -> Unit,
+    onSendClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -118,12 +159,12 @@ fun ChatBottomBar() {
         IconButton(onClick = { /* Emoji action */ }) {
             Icon(
                 painter = painterResource(id = R.drawable.emoji),
-                contentDescription = "Emoji",modifier = Modifier.size(24.dp)
+                contentDescription = "Emoji", modifier = Modifier.size(24.dp)
             )
         }
         BasicTextField(
             value = messageText,
-            onValueChange = { messageText = it },
+            onValueChange = onMessageChange,
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 8.dp),
@@ -138,16 +179,17 @@ fun ChatBottomBar() {
         IconButton(onClick = { /* Attach action */ }) {
             Icon(
                 painter = painterResource(id = R.drawable.file),
-                contentDescription = "Attach",modifier = Modifier.size(24.dp)
+                contentDescription = "Attach", modifier = Modifier.size(24.dp)
             )
         }
         IconButton(
-            onClick = { /* Send action */ },
+            onClick = onSendClick,
             enabled = messageText.isNotBlank()
         ) {
             Icon(
                 painter = painterResource(id = if (messageText.isNotBlank()) R.drawable.send else R.drawable.mic),
-                contentDescription = if (messageText.isNotBlank()) "Send" else "Mic",modifier = Modifier.size(24.dp)
+                contentDescription = if (messageText.isNotBlank()) "Send" else "Mic",
+                modifier = Modifier.size(24.dp)
             )
         }
     }
@@ -177,10 +219,3 @@ fun MessageBubble(message: String, isSentByUser: Boolean) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewWhatsAppChatScreen() {
-    MaterialTheme {
-        WhatsAppChatScreen()
-    }
-}

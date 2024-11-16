@@ -164,7 +164,7 @@ fun ProfileScreen(
                 }
             }
 
-            Divider()
+            HorizontalDivider()
         }
 
         Spacer(modifier = Modifier.height(16.dp))

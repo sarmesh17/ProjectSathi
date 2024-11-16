@@ -3,6 +3,7 @@ package com.matrix.projectsathi.presentation.loginscreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +43,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.matrix.projectsathi.R
+import com.matrix.projectsathi.presentation.LoginSuccessScreen
+import com.matrix.projectsathi.presentation.error.ErrorScreen
 import com.matrix.projectsathi.presentation.viewmodels.AuthViewModel
 import com.matrix.projectsathi.presentation.viewmodels.LoginState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -203,17 +209,28 @@ fun LoginScreen(
     // Show loading or error states
     when (loginState) {
         is LoginState.Loading -> {
-            CircularProgressIndicator()
+            Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+
+                CircularProgressIndicator()
+            }
         }
 
         is LoginState.Success -> {
+
+
+            LoginSuccessScreen(message = "Login Successfully")
+
             LaunchedEffect(Unit) {
+
                 onLoginSuccess() // Navigate to next screen after successful login
             }
         }
 
         is LoginState.Error -> {
-            Text(text = (loginState as LoginState.Error).message, color = Color.Red)
+
+            val text = (loginState as LoginState.Error).message
+            
+            ErrorScreen(message = text)
         }
 
         LoginState.Default -> {
