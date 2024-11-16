@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.matrix.projectsathi.presentation.bottomnavigation.BottomNavigation
 import com.matrix.projectsathi.presentation.dashboard.appbar.AppBar
 import com.matrix.projectsathi.presentation.dashboard.feed_screen.FeedScreen
 import com.matrix.projectsathi.presentation.viewmodels.DashBoardScreenViewModel
@@ -28,7 +29,7 @@ fun DashBoard(
 
     Scaffold(topBar = {
         AppBar(navHostController)
-    }) {
+    }, bottomBar = { BottomNavigation(onClick = {}, selectedItem = 0) }) {
 
         Column(
             modifier = Modifier

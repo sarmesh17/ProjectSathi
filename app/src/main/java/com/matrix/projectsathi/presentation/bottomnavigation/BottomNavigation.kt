@@ -1,4 +1,4 @@
-package com.matrix.projectsathi
+package com.matrix.projectsathi.presentation.bottomnavigation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -26,16 +26,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.matrix.projectsathi.R
 
 @Composable
 fun BottomNavigation( onClick:(index:Int) -> Unit, selectedItem: Int) {
 
     val items = listOf(
-        NavigationItem("Projects", R.drawable.project_icon_filled,R.drawable.project_icon_outline),
-        NavigationItem("Requests", R.drawable.request_filled,R.drawable.request_outlined),
-        NavigationItem("Save", R.drawable.save_filled,R.drawable.save_outline),
-        NavigationItem("Notification", R.drawable.notification_filled,R.drawable.notification_outline),
-        NavigationItem("Profile", R.drawable.profile_filled,R.drawable.profile_outline)
+        NavigationItem("Projects", R.drawable.project_icon_filled, R.drawable.project_icon_outline),
+        NavigationItem("Requests", R.drawable.request_filled, R.drawable.request_outlined),
+        NavigationItem("Save", R.drawable.save_filled, R.drawable.save_outline),
+        NavigationItem("Notification", R.drawable.notification_filled,
+            R.drawable.notification_outline
+        ),
+        NavigationItem("Profile", R.drawable.profile_filled, R.drawable.profile_outline)
     )
 
     NavigationBar(
