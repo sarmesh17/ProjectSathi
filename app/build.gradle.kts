@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.matrix.projectsathi"
-        minSdk = 34
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,4 +84,8 @@ dependencies {
     //navigation
     implementation("androidx.navigation:navigation-compose:2.8.0-beta05")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    implementation("io.coil-kt:coil-compose:2.7.0")
+
+
 }

@@ -1,5 +1,9 @@
 package com.matrix.projectsathi
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.matrix.projectsathi.presentation.viewmodels.PublishProjectViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Image
@@ -39,25 +43,29 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShareThoughtScreen(
+fun ProjectStatusCreateScreen(
+    publishProjectViewModel: PublishProjectViewModel,
+    navHostController: NavHostController,
     profileImageUrl: Int,
-    onPostClick: (String) -> Unit
+    onPostClick: () -> Unit
 ) {
     var thoughtText by remember { mutableStateOf("") }
     var isDropdownExpanded by remember { mutableStateOf(false) }
@@ -76,6 +84,18 @@ fun ShareThoughtScreen(
     var endDay by remember { mutableStateOf("Saturday") }
 
     var textFieldList by remember { mutableStateOf(listOf<String>()) }
+
+    val context = LocalContext.current
+    val selectedImages = remember { mutableStateListOf<Uri>() } // Holds the selected images
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            selectedImages.clear() // Clear previous selections
+            selectedImages.addAll(uris) // Add newly selected images
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -171,7 +191,21 @@ fun ShareThoughtScreen(
 
             // Post Button
             Button(
-                onClick = { onPostClick(thoughtText) },
+                onClick = {
+
+                    publishProjectViewModel.publishStatus(
+                        projectDescription = thoughtText,
+                        projectDuration = durationText,
+                        durationType = selectedUnit,
+                        startTime = "$startTime $amPmStart",
+                        endTime = "$endTime $amPmEnd",
+                        skillsRequired = textFieldList,
+                        projectGoal = projectGoal,
+                        technologiesUsed = technologiesUsed,
+                        amount = amount,
+                        images = selectedImages
+                    )
+                },
                 //enabled = thoughtText.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.amber))
             ) {
@@ -206,7 +240,7 @@ fun ShareThoughtScreen(
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            IconButton(onClick = { /* Handle Add Image */ }) {
+            IconButton(onClick = { launcher.launch("image/*") }) {
                 Icon(painter = painterResource(id = R.drawable.image), contentDescription = null, modifier = Modifier.size(27.dp))
             }
             IconButton(onClick = { /* Handle Add More Options */ }) {
@@ -412,17 +446,6 @@ fun ShareThoughtScreen(
 }
 
 
-
-@Preview(showBackground = true)
-@Composable
-fun ShareThoughtScreenPreview() {
-    ShareThoughtScreen(
-        profileImageUrl = R.drawable.img,
-        onPostClick = { thoughtText ->
-            println("User shared: $thoughtText")
-        }
-    )
-}
 
 @Composable
 fun DropdownMenuBox(

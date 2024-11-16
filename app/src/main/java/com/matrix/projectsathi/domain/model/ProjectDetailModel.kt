@@ -1,4 +1,4 @@
-package com.example.projectconnect.domain.model
+package com.matrix.projectsathi.domain.model
 
 data class ProjectDetailModel(
     val title: String,

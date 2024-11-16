@@ -1,19 +1,20 @@
 package com.matrix.projectsathi.presentation.viewmodels
 
-
-
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class PublishProjectViewModel @Inject constructor(
     private val auth: FirebaseAuth,
-    private val database: FirebaseDatabase
+    private val database: FirebaseDatabase,
+    private val storage: FirebaseStorage
 ) : ViewModel() {
 
     private val _publishState = MutableLiveData<PublishState>()
@@ -21,13 +22,15 @@ class PublishProjectViewModel @Inject constructor(
 
     fun publishStatus(
         projectDescription: String,
-        projectDuration: Int,
+        projectDuration: String,
         durationType: String,
         startTime: String,
         endTime: String,
         skillsRequired: List<String>,
         projectGoal: String,
-        technologiesUsed: List<String>
+        technologiesUsed: String,
+        amount: String,
+        images: List<Uri>
     ) {
         val currentUser = auth.currentUser
         if (currentUser == null) {
@@ -35,8 +38,77 @@ class PublishProjectViewModel @Inject constructor(
             return
         }
 
-        val userId = currentUser.uid // Identify the user by UID
+        _publishState.value = PublishState.Loading
+        val userId = currentUser.uid
         val statusId = database.reference.child("statuses").push().key ?: ""
+        val uploadedImageUrls = mutableListOf<String>()
+
+        // Upload images to Firebase Storage
+        if (images.isNotEmpty()) {
+            images.forEach { uri ->
+                val imageRef = storage.reference.child("statusImages/$userId/$statusId/${uri.lastPathSegment}")
+                imageRef.putFile(uri).addOnSuccessListener { taskSnapshot ->
+                    imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                        uploadedImageUrls.add(downloadUrl.toString())
+                        if (uploadedImageUrls.size == images.size) {
+                            // All images uploaded; publish status
+                            saveStatus(
+                                userId = userId,
+                                statusId = statusId,
+                                projectDescription = projectDescription,
+                                projectDuration = projectDuration,
+                                durationType = durationType,
+                                startTime = startTime,
+                                endTime = endTime,
+                                skillsRequired = skillsRequired,
+                                projectGoal = projectGoal,
+                                technologiesUsed = technologiesUsed,
+                                amount =amount,
+                                images = uploadedImageUrls
+                            )
+                        }
+                    }.addOnFailureListener { exception ->
+                        _publishState.value =
+                            PublishState.Error("Image upload failed: ${exception.message}")
+                    }
+                }.addOnFailureListener { exception ->
+                    _publishState.value =
+                        PublishState.Error("Image upload failed: ${exception.message}")
+                }
+            }
+        } else {
+            // No images to upload; publish status directly
+            saveStatus(
+                userId = userId,
+                statusId = statusId,
+                projectDescription = projectDescription,
+                projectDuration = projectDuration,
+                durationType = durationType,
+                startTime = startTime,
+                endTime = endTime,
+                skillsRequired = skillsRequired,
+                projectGoal = projectGoal,
+                technologiesUsed = technologiesUsed,
+                amount =amount,
+                images = emptyList()
+            )
+        }
+    }
+
+    private fun saveStatus(
+        userId: String,
+        statusId: String,
+        projectDescription: String,
+        projectDuration: String,
+        durationType: String,
+        startTime: String,
+        endTime: String,
+        skillsRequired: List<String>,
+        projectGoal: String,
+        technologiesUsed: String,
+        amount: String,
+        images: List<String>
+    ) {
         val status = mapOf(
             "projectDescription" to projectDescription,
             "projectDuration" to mapOf(
@@ -50,10 +122,12 @@ class PublishProjectViewModel @Inject constructor(
             "skillsRequired" to skillsRequired,
             "projectGoal" to projectGoal,
             "technologiesUsed" to technologiesUsed,
+            "amount" to amount,
+            "images" to images,
             "timestamp" to System.currentTimeMillis()
         )
 
-        // Add status under the user's node
+        // Add status under user's node
         database.reference.child("users").child(userId).child("statuses").child(statusId).setValue(status)
             .addOnSuccessListener {
                 // Add status reference to globalStatuses node
@@ -63,11 +137,13 @@ class PublishProjectViewModel @Inject constructor(
                 )).addOnSuccessListener {
                     _publishState.value = PublishState.Success
                 }.addOnFailureListener { exception ->
-                    _publishState.value = PublishState.Error("Failed to add to global: ${exception.message}")
+                    _publishState.value =
+                        PublishState.Error("Failed to add to global: ${exception.message}")
                 }
             }
             .addOnFailureListener { exception ->
-                _publishState.value = PublishState.Error("Failed to add status: ${exception.message}")
+                _publishState.value =
+                    PublishState.Error("Failed to add status: ${exception.message}")
             }
     }
 }

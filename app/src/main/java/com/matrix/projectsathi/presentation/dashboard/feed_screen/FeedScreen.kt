@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,28 +40,22 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.matrix.projectsathi.R
+import com.matrix.projectsathi.presentation.navigation.Routes
 
 @Composable
-@Preview(showSystemUi = true)
 fun FeedScreen(
-    userName: String = "Sarmesh Kalwar",
+    userName: String,
     userRole: String = "Android Developer",
     statusTime: String = "1W",
-    images: List<Int>? = null,
-    statusText: String? = null,
-    skills: List<String>?= listOf( // Sample data for skills and amounts
-        "Kotlin",
-        "Flutter",
-        "Jetpack Compose",
-    ),
-    totalAmount: Int?=500
-
-
-
+    images: List<String>?,
+    statusText: String?,
+    skills: List<String>?,
+    totalAmount: String,navHostController: NavHostController
     ) {
 
     var isCommentSectionVisible by remember { mutableStateOf(false) }
@@ -81,6 +74,11 @@ fun FeedScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(start = 8.dp)
         ) {
+
+//            AsyncImage(
+//                model = images,
+//                contentDescription = null,
+//                modifier = Modifier.size(140.dp, 150.dp).padding(top = 12.dp),)
             Image(
                 painter = painterResource(id = R.drawable.user_image),
                 contentDescription = null,
@@ -112,8 +110,8 @@ fun FeedScreen(
             // Case 1: Both Text and Single Image
             statusText != null && images != null && images.size == 1 -> {
                 StatusTextWithSeeMore(statusText)
-                Image(
-                    painter = painterResource(id = images.first()),
+                AsyncImage(
+                    model = images.first(), // Assuming images.first() gives you the URL as a String
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -122,6 +120,7 @@ fun FeedScreen(
                         .clip(RoundedCornerShape(3.dp)),
                     contentScale = ContentScale.Crop
                 )
+
             }
             // Case 2: Both Text and Multiple Images
             statusText != null && images != null && images.size > 1 -> {
@@ -134,8 +133,8 @@ fun FeedScreen(
             }
             // Case 4: Only One Image (Full Width)
             images != null && images.size == 1 -> {
-                Image(
-                    painter = painterResource(id = images.first()),
+                AsyncImage(
+                    model = images.first(),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -163,11 +162,9 @@ fun FeedScreen(
 
         // Project Skills and Amount Section
         if (skills != null) {
-            if (totalAmount != null) {
-                SkillsAndAmountSection(
-                    skills = skills, totalAmount = totalAmount
-                )
-            }
+            SkillsAndAmountSection(
+                skills = skills, totalAmount = totalAmount
+            )
         }
 
         // Buttons Row
@@ -188,7 +185,9 @@ fun FeedScreen(
             ButtonWithIcon(
                 icon = painterResource(id = R.drawable.connect),
                 text = "Connect",
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).clickable {
+                    navHostController.navigate(Routes.ProjectDetailScreen)
+                }
             )
 
             ToggleButtonWithIcon(
@@ -281,30 +280,33 @@ fun StatusTextWithSeeMore(text: String) {
         }
     }
 }
-
 @Composable
-fun DisplayImageGrid(images: List<Int>) {
+fun DisplayImageGrid(images: List<String>?) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(images) { imageRes ->
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(shape = RoundedCornerShape(4.dp)),
-                contentScale = ContentScale.Crop
-            )
+        // Safely handle null case for images
+        images?.let {
+            items(it) { imageRes ->
+                AsyncImage(
+                    model = imageRes,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(shape = RoundedCornerShape(4.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
     }
 }
 
+
 @Composable
-fun SkillsAndAmountSection(skills: List<String>, totalAmount: Int) {
+fun SkillsAndAmountSection(skills: List<String>, totalAmount: String) {
     Column(
         modifier = Modifier
             .padding(16.dp)

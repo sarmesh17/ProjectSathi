@@ -1,59 +1,93 @@
 package com.matrix.projectsathi.presentation.viewmodels
 
-import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+import androidx.room.util.copy
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.matrix.projectsathi.domain.model.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class DashBoardScreenViewModel @Inject constructor(
-    private val firebaseDatabase: FirebaseDatabase
+    private val database: FirebaseDatabase,
+    private val auth:FirebaseAuth
 ) : ViewModel() {
 
-    // Holds the list of statuses
-    val statuses = mutableStateOf<List<Status>>(emptyList())
+    private val _globalStatuses = MutableLiveData<List<Status>>()
+    val globalStatuses: LiveData<List<Status>> get() = _globalStatuses
 
-    // Holds any potential error message
-    val errorMessage = mutableStateOf<String?>(null)
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
 
     init {
-        fetchStatuses()
+        fetchAllStatuses()
+        fetchUserDetails()
     }
 
-    private fun fetchStatuses() {
-        val statusRef = firebaseDatabase.getReference("statuses")
+    private fun fetchAllStatuses() {
+        database.reference.child("globalStatuses").get()
+            .addOnSuccessListener { snapshot ->
+                val detailedStatuses = mutableListOf<Status>()
 
-        statusRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val statusList = snapshot.children.mapNotNull { child ->
-                    try {
-                        val caption = child.child("caption").getValue(String::class.java) ?: ""
-                        val amount = child.child("amount").getValue(Double::class.java) ?: 0.0
-                        val images = child.child("images").children.mapNotNull { it.getValue(String::class.java) }
-                        val skillsRequired = child.child("skillsRequired").children.mapNotNull { it.getValue(String::class.java) }
+                snapshot.children.forEach { statusSnapshot ->
+                    val statusId = statusSnapshot.key ?: return@forEach
+                    val userId = statusSnapshot.child("userId").value as? String ?: return@forEach
+                    val timestamp = statusSnapshot.child("timestamp").value as? Long ?: 0L
 
-                        Status(
-                            caption = caption,
-                            amount = amount,
-                            images = images,
-                            skillsRequired = skillsRequired
-                        )
-                    } catch (e: Exception) {
-                        null // Ignore invalid data
-                    }
+                    // Fetch status details
+                    database.reference.child("users").child(userId).child("statuses")
+                        .child(statusId)
+                        .get()
+                        .addOnSuccessListener { statusDetailsSnapshot ->
+                            val statusDetails = statusDetailsSnapshot.getValue(Status::class.java)
+                            if (statusDetails != null) {
+                                detailedStatuses.add(
+                                    statusDetails.copy(
+                                        userId = userId,
+                                        timestamp = timestamp
+                                    )
+                                )
+                            }
+
+                            // If all statuses are fetched, update LiveData
+                            if (detailedStatuses.size == snapshot.childrenCount.toInt()) {
+                                _globalStatuses.value =
+                                    detailedStatuses.sortedByDescending { it.timestamp }
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            _error.value = "Failed to fetch status details: ${exception.message}"
+                        }
                 }
-                statuses.value = statusList // Update the state
-                errorMessage.value = null // Clear any previous errors
             }
+            .addOnFailureListener { exception ->
+                _error.value = "Failed to fetch global statuses: ${exception.message}"
+            }
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-                errorMessage.value = "Failed to fetch statuses: ${error.message}" // Update error message
+
+    var firstName: String? = null
+    var lastName: String? = null
+
+    private fun fetchUserDetails() {
+        val currentUser = auth.currentUser
+            ?: // Handle the case where the user is not logged in
+            return
+
+        val userId = currentUser.uid
+        database.reference.child("users").child(userId).get()
+            .addOnSuccessListener { snapshot ->
+                firstName = snapshot.child("firstName").value as? String
+                lastName = snapshot.child("lastName").value as? String
+
+                // Log or use these variables as needed
+                println("First Name: $firstName, Last Name: $lastName")
             }
-        })
+            .addOnFailureListener { exception ->
+                println("Failed to fetch user details: ${exception.message}")
+            }
     }
 }

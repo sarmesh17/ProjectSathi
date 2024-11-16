@@ -1,8 +1,24 @@
 package com.matrix.projectsathi.domain.model
 
 data class Status(
-    val caption: String = "",
-    val amount: Double = 0.0,
+    val userId: String = "",
+    val projectDescription: String = "",
+    val projectDuration: ProjectDuration = ProjectDuration(),
+    val workingTime: WorkingTime = WorkingTime(),
+    val skillsRequired: List<String> = emptyList(),
+    val projectGoal: String = "",
+    val technologiesUsed: String = "",
+    val amount:String="",
     val images: List<String> = emptyList(),
-    val skillsRequired: List<String> = emptyList()
+    val timestamp: Long = 0L
+)
+
+data class ProjectDuration(
+    val duration: String = "",
+    val type: String = "" // e.g., "days", "weeks", "months"
+)
+
+data class WorkingTime(
+    val startTime: String = "", // e.g., "10:00 AM"
+    val endTime: String = ""   // e.g., "6:00 PM"
 )

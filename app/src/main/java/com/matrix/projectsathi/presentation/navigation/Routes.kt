@@ -13,4 +13,11 @@ sealed class Routes {
     data object LoginScreen:Routes()
     @Serializable
     data object DashBoardScreen:Routes()
+    @Serializable
+    data object AppBar:Routes()
+    @Serializable
+    data object ProjectStatusCreateScreen:Routes()
+
+    @Serializable
+    data object ProjectDetailScreen:Routes()
 }

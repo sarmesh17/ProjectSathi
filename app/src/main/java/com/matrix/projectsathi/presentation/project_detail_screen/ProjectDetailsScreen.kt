@@ -53,19 +53,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.matrix.projectsathi.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showSystemUi = true)
-fun ProjectDetailsScreen() {
+fun ProjectDetailsScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Project Details") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle back press */ }) {
+                    IconButton(onClick = { navController.navigateUp()}) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 }

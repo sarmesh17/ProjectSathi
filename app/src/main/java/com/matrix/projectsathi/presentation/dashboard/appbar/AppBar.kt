@@ -1,6 +1,7 @@
 package com.matrix.projectsathi.presentation.dashboard.appbar
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,12 +27,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.matrix.projectsathi.R
 import com.matrix.projectsathi.presentation.dashboard.searchbar.SearchBar
+import com.matrix.projectsathi.presentation.navigation.Routes
 
 @Composable
-@Preview(showSystemUi = true)
-fun AppBar() {
+fun AppBar(navController: NavHostController) {
 
     var searchQuery by remember {
         mutableStateOf("")
@@ -79,7 +81,7 @@ fun AppBar() {
                 contentDescription = null,
                 tint = colorResource(
                     id = R.color.black
-                ), modifier = Modifier.size(23.dp)
+                ), modifier = Modifier.size(23.dp).clickable { navController.navigate(Routes.ProjectStatusCreateScreen) }
             )
 
 

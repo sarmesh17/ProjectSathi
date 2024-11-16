@@ -5,11 +5,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.matrix.projectsathi.ProjectStatusCreateScreen
+import com.matrix.projectsathi.R
 import com.matrix.projectsathi.presentation.dashboard.DashBoard
+import com.matrix.projectsathi.presentation.dashboard.appbar.AppBar
 import com.matrix.projectsathi.presentation.loginscreen.LoginScreen
 import com.matrix.projectsathi.presentation.onboardingscreen.OnBordingScreen
+import com.matrix.projectsathi.presentation.project_detail_screen.ProjectDetailsScreen
 import com.matrix.projectsathi.presentation.signup_screen.SignUpScreen
 import com.matrix.projectsathi.presentation.viewmodels.AuthViewModel
+import com.matrix.projectsathi.presentation.viewmodels.DashBoardScreenViewModel
+import com.matrix.projectsathi.presentation.viewmodels.PublishProjectViewModel
 
 @Composable
 fun ProjectSathiNavigationSystem(){
@@ -46,7 +52,23 @@ fun ProjectSathiNavigationSystem(){
 
         composable<Routes.DashBoardScreen> {
 
-            DashBoard()
+            val dashBoardScreenViewModel:DashBoardScreenViewModel= hiltViewModel()
+            DashBoard(navController, dashBoardScreenViewModel)
+        }
+
+        composable<Routes.AppBar> {
+            AppBar(navController)
+        }
+
+        composable<Routes.ProjectStatusCreateScreen> {
+            val publishProjectViewModel:PublishProjectViewModel= hiltViewModel()
+            ProjectStatusCreateScreen(navHostController = navController, profileImageUrl = R.drawable.img, publishProjectViewModel = publishProjectViewModel){
+
+            }
+        }
+
+        composable<Routes.ProjectDetailScreen> {
+            ProjectDetailsScreen(navController)
         }
 
     }
