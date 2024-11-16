@@ -10,8 +10,12 @@ import com.matrix.projectsathi.R
 import com.matrix.projectsathi.presentation.dashboard.DashBoard
 import com.matrix.projectsathi.presentation.dashboard.appbar.AppBar
 import com.matrix.projectsathi.presentation.loginscreen.LoginScreen
+import com.matrix.projectsathi.presentation.notificationscreen.NotificationScreen
 import com.matrix.projectsathi.presentation.onboardingscreen.OnBordingScreen
+import com.matrix.projectsathi.presentation.profilescreen.ProfileScreen
 import com.matrix.projectsathi.presentation.project_detail_screen.ProjectDetailsScreen
+import com.matrix.projectsathi.presentation.requestscreen.RequestScreen
+import com.matrix.projectsathi.presentation.savescreen.SaveScreen
 import com.matrix.projectsathi.presentation.signup_screen.SignUpScreen
 import com.matrix.projectsathi.presentation.viewmodels.AuthViewModel
 import com.matrix.projectsathi.presentation.viewmodels.DashBoardScreenViewModel
@@ -70,6 +74,24 @@ fun ProjectSathiNavigationSystem(){
         composable<Routes.ProjectDetailScreen> {
             ProjectDetailsScreen(navController)
         }
+
+        composable<Routes.RequestScreen> {
+            RequestScreen(navController)
+        }
+
+        composable<Routes.SaveScreen> {
+            SaveScreen(navController)
+        }
+
+        composable<Routes.NotificationScreen> {
+            NotificationScreen(navController)
+        }
+
+        composable<Routes.ProfileScreen> {
+            ProfileScreen(navController)
+        }
+
+
 
     }
 

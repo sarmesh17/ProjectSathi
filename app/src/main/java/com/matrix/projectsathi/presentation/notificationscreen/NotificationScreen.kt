@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,48 +28,69 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.matrix.projectsathi.R
+import com.matrix.projectsathi.presentation.bottomnavigation.BottomNavigation
+import com.matrix.projectsathi.presentation.navigation.Routes
 
-@Preview(showSystemUi = true)
 @Composable
-fun NotificationScreen() {
-    // Dummy notification list
-    val notifications = listOf(
-        NotificationItem(
-            imageRes = R.drawable.img_2,
-            title = "New Project Update",
-            description = "Your project has been reviewed by an expert.",
-            timestamp = "5 mins ago"
-        ),
-        NotificationItem(
-            imageRes = R.drawable.request_filled,
-            title = "Request Approved",
-            description = "Your request for mentorship has been approved.",
-            timestamp = "1 hour ago"
-        ),
-        NotificationItem(
-            imageRes = R.drawable.img_2,
-            title = "Market Trends",
-            description = "Check out the latest projects in the market.",
-            timestamp = "10 mins ago"
-        ),
-        NotificationItem(
-            imageRes = R.drawable.save_filled,
-            title = "Project Saved",
-            description = "You saved a project to your favorites.",
-            timestamp = "Yesterday"
-        )
-    )
+fun NotificationScreen(navHostController: NavHostController) {
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(notifications.size) { index ->
-            NotificationCard(notification = notifications[index])
+    Scaffold(
+        bottomBar = {
+
+            BottomNavigation(navHostController, selectedItem = 3, onClick = { index ->
+                when (index) {
+                    0 -> navHostController.navigate(Routes.DashBoardScreen)
+                    1 -> navHostController.navigate(Routes.RequestScreen)
+                    2 -> navHostController.navigate(Routes.SaveScreen)
+                    3 -> {
+                        navHostController.navigate(Routes.NotificationScreen);
+                    }
+                    4 -> navHostController.navigate(Routes.ProfileScreen)
+                }
+            })
+        }
+    ) { it ->
+        Modifier.padding(it)
+        // Dummy notification list
+        val notifications = listOf(
+            NotificationItem(
+                imageRes = R.drawable.img_2,
+                title = "New Project Update",
+                description = "Your project has been reviewed by an expert.",
+                timestamp = "5 mins ago"
+            ),
+            NotificationItem(
+                imageRes = R.drawable.request_filled,
+                title = "Request Approved",
+                description = "Your request for mentorship has been approved.",
+                timestamp = "1 hour ago"
+            ),
+            NotificationItem(
+                imageRes = R.drawable.img_2,
+                title = "Market Trends",
+                description = "Check out the latest projects in the market.",
+                timestamp = "10 mins ago"
+            ),
+            NotificationItem(
+                imageRes = R.drawable.save_filled,
+                title = "Project Saved",
+                description = "You saved a project to your favorites.",
+                timestamp = "Yesterday"
+            )
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(notifications.size) { index ->
+                NotificationCard(notification = notifications[index])
+            }
         }
     }
 }

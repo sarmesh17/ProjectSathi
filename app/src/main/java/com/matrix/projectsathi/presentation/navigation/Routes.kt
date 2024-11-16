@@ -7,17 +7,34 @@ sealed class Routes {
 
     @Serializable
     data object OnBoardingScreen:Routes()
+
     @Serializable
     data object SignUpScreen:Routes()
+
     @Serializable
     data object LoginScreen:Routes()
+
     @Serializable
     data object DashBoardScreen:Routes()
+
     @Serializable
     data object AppBar:Routes()
+
     @Serializable
     data object ProjectStatusCreateScreen:Routes()
 
     @Serializable
     data object ProjectDetailScreen:Routes()
+
+    @Serializable
+    data object ProfileScreen:Routes()
+
+    @Serializable
+    data object SaveScreen:Routes()
+
+    @Serializable
+    data object NotificationScreen:Routes()
+
+    @Serializable
+    data object RequestScreen:Routes()
 }

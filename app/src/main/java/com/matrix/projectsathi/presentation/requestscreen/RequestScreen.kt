@@ -17,7 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.matrix.projectsathi.R
+import com.matrix.projectsathi.presentation.bottomnavigation.BottomNavigation
+import com.matrix.projectsathi.presentation.navigation.Routes
 
 // Dummy Data Class
 data class FriendRequest(
@@ -35,33 +38,52 @@ val sampleRequests = listOf(
 )
 
 @Composable
-fun RequestScreen() {
+fun RequestScreen(navHostController: NavHostController) {
     var requests by remember { mutableStateOf(sampleRequests) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        Text(
-            text = "Requests",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    Scaffold(
+        bottomBar = {
 
-        requests.forEach { request ->
-            RequestItem(
-                request = request,
-                onAccept = {
-                    requests = requests.filter { it.id != request.id }
-                },
-                onDecline = {
-                    requests = requests.filter { it.id != request.id }
+            BottomNavigation(navHostController, selectedItem = 1, onClick = { index ->
+                when (index) {
+                    0 ->  navHostController.navigate(Routes.DashBoardScreen)
+                    1 -> {
+                        navHostController.navigate(Routes.RequestScreen);
+                    }
+                    2 -> navHostController.navigate(Routes.SaveScreen)
+                    3 -> navHostController.navigate(Routes.NotificationScreen)
+                    4 -> navHostController.navigate(Routes.ProfileScreen)
                 }
+            })
+        }
+    ) { it ->
+        Modifier.padding(it)
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top
+        ) {
+            Text(
+                text = "Requests",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
+            requests.forEach { request ->
+                RequestItem(
+                    request = request,
+                    onAccept = {
+                        requests = requests.filter { it.id != request.id }
+                    },
+                    onDecline = {
+                        requests = requests.filter { it.id != request.id }
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
@@ -126,8 +148,3 @@ fun RequestItem(
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun RequestScreenPreview() {
-    RequestScreen()
-}
