@@ -1,9 +1,11 @@
 _ **TITLE AND DESCRIPTION**_
-Project Sathi is a social media like platform designed to connect tech students with industry experts.The purpose of the app is to provide a space where students can receive guidance, 
-mentorship, and support for their coding and project related challanges.
+
+             Project Sathi is a social media like platform designed to connect tech students with industry experts.The purpose of the app is to provide a space where students can receive 
+             guidance,mentorship, and support for their coding and project related challanges.
 
 
 _**TABLE OF CONTENT**_
+
        1. TITLE AND DESCRIPTION
        2. PROBLEM STATEMENT
        3. FEATURES
