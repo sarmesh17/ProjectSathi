@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.sp
 fun BottomNavigation( onClick:(index:Int) -> Unit, selectedItem: Int) {
 
     val items = listOf(
-        NavigationItem("Projects", R.drawable.home_filled,R.drawable.home_outline),
-        NavigationItem("MyNetworks", R.drawable.home_filled,R.drawable.home_outline),
-        NavigationItem("Save", R.drawable.home_filled,R.drawable.home_outline),
-        NavigationItem("Notification", R.drawable.home_filled,R.drawable.home_outline),
-        NavigationItem("Profile", R.drawable.home_filled,R.drawable.home_outline)
+        NavigationItem("Projects", R.drawable.project_icon_filled,R.drawable.project_icon_outline),
+        NavigationItem("Requests", R.drawable.request_filled,R.drawable.request_outlined),
+        NavigationItem("Save", R.drawable.save_filled,R.drawable.save_outline),
+        NavigationItem("Notification", R.drawable.notification_filled,R.drawable.notification_outline),
+        NavigationItem("Profile", R.drawable.profile_filled,R.drawable.profile_outline)
     )
 
     NavigationBar(
@@ -52,7 +52,7 @@ fun BottomNavigation( onClick:(index:Int) -> Unit, selectedItem: Int) {
         items.forEachIndexed{ index, item->
             NavigationBarItem(
                 selected = selectedItem == index,
-                onClick = { onClick(index)},
+                onClick = { onClick(index) },
                 label = {
                     if ( index == selectedItem){
                         Text(
