@@ -26,10 +26,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.matrix.projectsathi.R
 
 @Composable
-fun BottomNavigation( onClick:(index:Int) -> Unit, selectedItem: Int) {
+fun BottomNavigation( navHostController: NavHostController,onClick:(index:Int) -> Unit, selectedItem: Int) {
 
     val items = listOf(
         NavigationItem("Projects", R.drawable.project_icon_filled, R.drawable.project_icon_outline),
@@ -119,5 +121,5 @@ data class NavigationItem(
 @Preview(showSystemUi = true)
 @Composable
 fun ButtonNavPreview (){
-    BottomNavigation( onClick = {}, selectedItem = 0)
+    BottomNavigation( navHostController = rememberNavController(),onClick = {}, selectedItem = 0)
 }

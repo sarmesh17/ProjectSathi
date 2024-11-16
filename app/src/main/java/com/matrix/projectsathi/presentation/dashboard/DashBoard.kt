@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,6 +17,7 @@ import androidx.navigation.NavHostController
 import com.matrix.projectsathi.presentation.bottomnavigation.BottomNavigation
 import com.matrix.projectsathi.presentation.dashboard.appbar.AppBar
 import com.matrix.projectsathi.presentation.dashboard.feed_screen.FeedScreen
+import com.matrix.projectsathi.presentation.navigation.Routes
 import com.matrix.projectsathi.presentation.viewmodels.DashBoardScreenViewModel
 
 @Composable
@@ -29,7 +31,24 @@ fun DashBoard(
 
     Scaffold(topBar = {
         AppBar(navHostController)
-    }, bottomBar = { BottomNavigation(onClick = {}, selectedItem = 0) }) {
+    },
+        bottomBar = {
+
+            BottomAppBar {
+
+            }
+
+            BottomNavigation(navHostController, selectedItem = 0, onClick = { index ->
+                when (index) {
+                    0 -> { navHostController.navigate(Routes.DashBoardScreen); }
+                    1 -> navHostController.navigate(Routes.RequestScreen)
+                    2 -> navHostController.navigate(Routes.SaveScreen)
+                    3 -> navHostController.navigate(Routes.NotificationScreen)
+                    4 -> navHostController.navigate(Routes.ProfileScreen)
+                }
+            })
+        }
+    ) {
 
         Column(
             modifier = Modifier
