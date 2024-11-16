@@ -5,6 +5,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.matrix.projectsathi.presentation.dashboard.DashBoard
+import com.matrix.projectsathi.presentation.loginscreen.LoginScreen
 import com.matrix.projectsathi.presentation.onboardingscreen.OnBordingScreen
 import com.matrix.projectsathi.presentation.signup_screen.SignUpScreen
 import com.matrix.projectsathi.presentation.viewmodels.AuthViewModel
@@ -24,11 +26,27 @@ fun ProjectSathiNavigationSystem(){
 
         composable<Routes.SignUpScreen> {
             val viewModel:AuthViewModel= hiltViewModel()
-            SignUpScreen(viewModel = viewModel) {
+            SignUpScreen(viewModel = viewModel ) {
 
+                navController.navigate(Routes.DashBoardScreen)
             }
 
 
+        }
+
+        composable<Routes.LoginScreen> {
+
+            val viewModel:AuthViewModel= hiltViewModel()
+
+
+            LoginScreen(authViewModel =  viewModel) {
+                navController.navigate(Routes.DashBoardScreen)
+            }
+        }
+
+        composable<Routes.DashBoardScreen> {
+
+            DashBoard()
         }
 
     }

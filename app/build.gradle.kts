@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.0.20"
+
 }
 
 android {
@@ -12,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.matrix.projectsathi"
-        minSdk = 31
+        minSdk = 34
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
