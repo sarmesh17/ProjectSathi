@@ -1,10 +1,10 @@
-_ **TITLE AND DESCRIPTION**_
+**TITLE AND DESCRIPTION**
 
              Project Sathi is a social media like platform designed to connect tech students with industry experts.The purpose of the app is to provide a space where students can receive 
              guidance,mentorship, and support for their coding and project related challanges.
 
 
-_**TABLE OF CONTENT**_
+**TABLE OF CONTENT**
 
        1. TITLE AND DESCRIPTION
        2. PROBLEM STATEMENT
@@ -14,14 +14,14 @@ _**TABLE OF CONTENT**_
        6. SCREENSHOT
        7. VIDEOS
 
-_**PROBLEM STATEMENT**_
+**PROBLEM STATEMENT**
 
 1. Identify the problem:- Many tech students face difficulties in finding reliable guidance and mentorship, which can hinder their learning ad project development. 
 2. Explain the impact:- This gap can lead to frustration, stagnation in skill development, and even project failures.
 
  
   
-  _**FEATURES**_ 
+**FEATURES**
   
        1. Direct Messaging 
        2. Expert Profiles
@@ -30,11 +30,11 @@ _**PROBLEM STATEMENT**_
        5. Subscription
        6. Premium
 
-_ **INSTALLATION**_
+**INSTALLATION**
 
 
 
-_**USAGE**_
+**USAGE**
 
        1. Sign Up/Log in:- Create an account as a student or  an expert.
 
@@ -47,10 +47,10 @@ _**USAGE**_
        5. Subscription:- Subscribe to access premium features and consultations.
 
 
-_**SCREENSHOT**_
+**SCREENSHOT**
 
 
-_**VIDEOS**_
+**VIDEOS**
 
 
 
