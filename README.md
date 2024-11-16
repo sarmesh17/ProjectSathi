@@ -16,7 +16,7 @@ _**PROBLEM STATEMENT**_
 1. Identify the problem:- Many tech students face difficulties in finding reliable guidance and mentorship, which can hinder their learning ad project development. 
 2. Explain the impact:- This gap can lead to frustration, stagnation in skill development, and even project failures.
 
-  _**FEATURES**_
+  _**FEATURES**_ 
        1. Direct Messaging 
        2. Expert Profiles
        3. Project Showcases
