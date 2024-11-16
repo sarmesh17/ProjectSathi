@@ -2,6 +2,7 @@ package com.matrix.projectsathi.presentation.dashboard.feed_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,8 +19,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,8 +53,17 @@ fun FeedScreen(
     userRole: String = "Android Developer",
     statusTime: String = "1W",
     images: List<Int>? = null,
-    statusText: String? = null
-) {
+    statusText: String? = null,
+    skills: List<String>?= listOf( // Sample data for skills and amounts
+        "Kotlin",
+        "Flutter",
+        "Jetpack Compose",
+    ),
+    totalAmount: Int?=500
+
+
+
+    ) {
 
     var isCommentSectionVisible by remember { mutableStateOf(false) }
     var comments by remember { mutableStateOf(listOf<String>()) }
@@ -125,7 +139,7 @@ fun FeedScreen(
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .size(300.dp)
+                        .size(230.dp)
                         .padding(top = 8.dp)
                         .clip(RoundedCornerShape(3.dp)),
                     contentScale = ContentScale.Crop
@@ -143,6 +157,15 @@ fun FeedScreen(
                     fontWeight = FontWeight.Light,
                     color = colorResource(id = R.color.grey),
                     modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                )
+            }
+        }
+
+        // Project Skills and Amount Section
+        if (skills != null) {
+            if (totalAmount != null) {
+                SkillsAndAmountSection(
+                    skills = skills, totalAmount = totalAmount
                 )
             }
         }
@@ -184,8 +207,6 @@ fun FeedScreen(
 
 
     }
-
-
 
 
 }
@@ -282,5 +303,80 @@ fun DisplayImageGrid(images: List<Int>) {
     }
 }
 
+@Composable
+fun SkillsAndAmountSection(skills: List<String>, totalAmount: Int) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+            .border(
+                width = 1.dp,
+                color = colorResource(id = R.color.orange),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(16.dp)
+    ) {
+        // Title
+        Text(
+            text = "Skills Required",
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.black)
+            ),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        // Divider
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        )
+
+        // Skills List
+        skills.forEach { skill ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = colorResource(id = R.color.orange),
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = skill,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Total Amount
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Total Amount:",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "$${totalAmount}",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = colorResource(id = R.color.black)
+                )
+            )
+        }
+    }
+}
 
 

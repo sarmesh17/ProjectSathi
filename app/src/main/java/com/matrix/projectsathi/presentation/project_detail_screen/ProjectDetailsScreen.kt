@@ -325,6 +325,21 @@ fun ProjectDetailsCard() {
                 color = MaterialTheme.colorScheme.onSurface,
                 lineHeight = 20.sp
             )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Section: Client Available Time
+            Text(
+                text = "Client Available Time",
+                style = MaterialTheme.typography.headlineSmall,
+                color = colorResource(id = R.color.black)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Monday to Friday: 10 AM - 6 PM\nSaturday: 11 AM - 3 PM",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                lineHeight = 20.sp
+            )
         }
     }
 }
@@ -353,7 +368,7 @@ fun ProjectAmountSection() {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Project Amount: ₹50,000",
+                text = "Project Amount: 50,000",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
