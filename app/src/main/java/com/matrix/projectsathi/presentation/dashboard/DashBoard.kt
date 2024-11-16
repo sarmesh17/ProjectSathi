@@ -35,18 +35,18 @@ fun DashBoard(
         bottomBar = {
 
             BottomAppBar {
-
+                BottomNavigation(navHostController, selectedItem = 0, onClick = { index ->
+                    when (index) {
+                        0 -> { navHostController.navigate(Routes.DashBoardScreen); }
+                        1 -> navHostController.navigate(Routes.RequestScreen)
+                        2 -> navHostController.navigate(Routes.SaveScreen)
+                        3 -> navHostController.navigate(Routes.NotificationScreen)
+                        4 -> navHostController.navigate(Routes.ProfileScreen)
+                    }
+                })
             }
 
-            BottomNavigation(navHostController, selectedItem = 0, onClick = { index ->
-                when (index) {
-                    0 -> { navHostController.navigate(Routes.DashBoardScreen); }
-                    1 -> navHostController.navigate(Routes.RequestScreen)
-                    2 -> navHostController.navigate(Routes.SaveScreen)
-                    3 -> navHostController.navigate(Routes.NotificationScreen)
-                    4 -> navHostController.navigate(Routes.ProfileScreen)
-                }
-            })
+
         }
     ) {
 

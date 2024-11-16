@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.matrix.projectsathi.ProjectStatusCreateScreen
 import com.matrix.projectsathi.R
+import com.matrix.projectsathi.presentation.chatscreen.ChatScreen
 import com.matrix.projectsathi.presentation.dashboard.DashBoard
 import com.matrix.projectsathi.presentation.dashboard.appbar.AppBar
 import com.matrix.projectsathi.presentation.loginscreen.LoginScreen
@@ -89,6 +90,11 @@ fun ProjectSathiNavigationSystem(){
 
         composable<Routes.ProfileScreen> {
             ProfileScreen(navController)
+        }
+
+        composable<Routes.ChatScreen> {
+
+            ChatScreen(navHostController =navController )
         }
 
 

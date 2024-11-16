@@ -1,5 +1,6 @@
 package com.matrix.projectsathi.presentation.onboardingscreen
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +32,13 @@ import com.matrix.projectsathi.presentation.navigation.Routes
 
 @Composable
 fun OnBordingScreen(navController: NavHostController) {
+
+    val context = LocalContext.current
+    val window = ( context as Activity).window
+
+    val cinnabar = colorResource(id = R.color.amber)
+
+    window.statusBarColor = cinnabar.toArgb()
     Column (
         modifier = Modifier
             .fillMaxSize()

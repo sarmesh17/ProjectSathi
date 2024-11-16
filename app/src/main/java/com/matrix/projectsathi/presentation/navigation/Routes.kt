@@ -37,4 +37,7 @@ sealed class Routes {
 
     @Serializable
     data object RequestScreen:Routes()
+
+    @Serializable
+    data object ChatScreen:Routes()
 }

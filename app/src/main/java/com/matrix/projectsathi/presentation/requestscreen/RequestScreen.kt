@@ -76,11 +76,13 @@ fun RequestScreen(navHostController: NavHostController) {
                 RequestItem(
                     request = request,
                     onAccept = {
-                        requests = requests.filter { it.id != request.id }
+                        requests = requests.filter { it.id != request.id
+
+                        }
                     },
                     onDecline = {
                         requests = requests.filter { it.id != request.id }
-                    }
+                    },navHostController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -92,7 +94,7 @@ fun RequestScreen(navHostController: NavHostController) {
 fun RequestItem(
     request: FriendRequest,
     onAccept: () -> Unit,
-    onDecline: () -> Unit
+    onDecline: () -> Unit,navHostController: NavHostController
 ) {
     Row(
         modifier = Modifier
@@ -126,7 +128,10 @@ fun RequestItem(
 
         // Accept Button
         Button(
-            onClick = onAccept,
+            onClick = {onAccept()
+                navHostController.navigate(Routes.ChatScreen)
+
+                      },
             modifier = Modifier
                 .padding(horizontal = 4.dp)
                 .height(40.dp),

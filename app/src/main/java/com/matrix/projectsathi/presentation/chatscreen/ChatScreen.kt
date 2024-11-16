@@ -22,7 +22,7 @@ import com.matrix.projectsathi.R
 data class ChatMessage(val text: String, val isSentByUser: Boolean)
 
 @Composable
-fun WhatsAppChatScreen(navHostController: NavHostController) {
+fun ChatScreen(navHostController: NavHostController) {
     var messageList by remember { mutableStateOf<List<ChatMessage>>(emptyList()) }
     var messageText by remember { mutableStateOf("") }
 

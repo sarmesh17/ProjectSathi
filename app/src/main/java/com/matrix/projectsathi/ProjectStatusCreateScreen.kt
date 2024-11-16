@@ -110,7 +110,7 @@ fun ProjectStatusCreateScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Close Icon
-            IconButton(onClick = { /* Handle Close */ }) {
+            IconButton(onClick = { navHostController.navigateUp() }) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Close"

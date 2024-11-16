@@ -209,7 +209,9 @@ fun LoginScreen(
     // Show loading or error states
     when (loginState) {
         is LoginState.Loading -> {
-            Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Box (modifier = Modifier
+                .fillMaxSize()
+                .background(color = colorResource(id = R.color.orange)), contentAlignment = Alignment.Center){
 
                 CircularProgressIndicator()
             }
