@@ -4,7 +4,6 @@ mentorship, and support for their coding and project related challanges.
 
 
 _**TABLE OF CONTENT**_
-
        1. TITLE AND DESCRIPTION
        2. PROBLEM STATEMENT
        3. FEATURES
@@ -34,6 +33,7 @@ _ **INSTALLATION**_
 
 
 _**USAGE**_
+
        1. Sign Up/Log in:- Create an account as a student or  an expert.
 
        2. Profile Setup:- Complete your profile with relevant information.
